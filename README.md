@@ -1,6 +1,6 @@
 # MFD ERP Slayer Toolkit
 
-Thank you for using the MFD ERP Slayer Toolkit!
+Thank you for using the Slayer Toolkit!
 
 This toolkit is designed to provide a suite of software tools, web applications, and utilities tailored for efficient identification and management of ERP accounts. Whether you’re managing moderation tasks, maintaining community standards, or streamlining account reviews, the MFD ERP Slayer Toolkit aims to simplify and accelerate these processes.
 
