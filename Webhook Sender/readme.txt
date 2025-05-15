@@ -1,0 +1,1 @@
+Simple webhook sender. Only for Education purposes.
