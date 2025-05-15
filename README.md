@@ -1,4 +1,4 @@
-# MFD ERP Slayer Toolkit
+# Slayer Toolkit
 
 Thank you for using the Slayer Toolkit!
 
