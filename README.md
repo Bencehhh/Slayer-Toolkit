@@ -1,12 +1,12 @@
 # MFD ERP Slayer Toolkit
 
-Thank you for using the MFD ERP Slayer Toolkit!
+Thank you for using the Slayer Toolkit!
 
-This toolkit is designed to provide a suite of software tools, web applications, and utilities tailored for efficient identification and management of ERP accounts. Whether you’re managing moderation tasks, maintaining community standards, or streamlining account reviews, the MFD ERP Slayer Toolkit aims to simplify and accelerate these processes.
+This toolkit is designed to provide a suite of software tools, web applications, and utilities tailored for efficient identification and management of ERP accounts. Whether you’re managing moderation tasks, maintaining community standards, or streamlining account reviews, the Slayer Toolkit aims to simplify and accelerate these processes.
 
 ## About the Toolkit
 
-The MFD ERP Slayer Toolkit was built to assist moderation teams, particularly those focused on identifying and handling ERP (inappropriate roleplay) accounts. By automating parts of the review process, this toolkit enables users to manage and complete account reviews faster and more effectively. As the Roblox community grows, this toolkit will evolve to meet the increasing demand for moderation resources.
+The Slayer Toolkit was built to assist moderation teams, particularly those focused on identifying and handling ERP (inappropriate roleplay) accounts. By automating parts of the review process, this toolkit enables users to manage and complete account reviews faster and more effectively. As the Roblox community grows, this toolkit will evolve to meet the increasing demand for moderation resources.
 
 ### Key Features
 - Simplifies the identification of ERP accounts
@@ -14,7 +14,7 @@ The MFD ERP Slayer Toolkit was built to assist moderation teams, particularly th
 - Expands in functionality with regular updates
 - Various tools for completing ERP account lists
 
-This toolkit was developed for Moderation Dummies and all ERP Account "Slayers" dedicated to creating a safe and enjoyable community experience on Roblox.
+This toolkit was developed originally for MFD's Slayers but I realized, it is more than just that, so I dedicated myself to create a safe and enjoyable community experience on Roblox for those who use this toolkit while making their work faster.
 
 ---
 
@@ -43,4 +43,4 @@ Thank you for helping keep Roblox communities safe and enjoyable!
 
 © COPYRIGHT UNDER CREATIVE COMMONS  
 © CC BY 4.0  
-# 2024
+# 2025

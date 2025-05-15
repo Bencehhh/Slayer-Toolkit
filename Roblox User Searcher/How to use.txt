@@ -1,0 +1,7 @@
+Main.py is good for removing ()'s from usernames from your input file.
+Run the code and you will get back the blank usernames.
+Usersearch.py is a python code which automates user search and retrieves their USERID.
+Usersearch.py retrieves username inputs from usernames.txt and the output is for id's and usernames are roblox_user_ids.txt
+Input all the usernames you want to search in the usernames.txt and you get their id's in mere seconds! Looking up 100 users should take around 2-3 mins.
+Code was not tested with large pile of usernames, but should work fine.
+Created by BenXiadous
