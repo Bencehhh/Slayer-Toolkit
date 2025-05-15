@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Report Multitasking Tool</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffffff;
+    }
+    input[type="file"] {
+      margin: 10px 0;
+    }
+    .id-block {
+      background-color: #1e1e1e;
+      border-left: 5px solid #ffaa00;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 6px;
+    }
+    .id-block a {
+      color: #ffcc00;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .id-block a:hover {
+      text-decoration: underline;
+    }
+    .reason {
+      margin-left: 10px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    input[type="text"] {
+      padding: 5px;
+      margin-left: 5px;
+      border-radius: 3px;
+      border: none;
+      width: 250px;
+    }
+    button {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #e6e6e6;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-top: 20px;
+      font-family: monospace;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Report Multitasking Tool</h1>
+
+<input type="file" id="fileInput" accept=".txt,.log,.csv,text/plain">
+<div id="blocksContainer"></div>
+
+<button onclick="updatePreview()">Update Preview</button>
+<button onclick="downloadTXT()">Download TXT</button>
+
+<h2>Preview Output</h2>
+<textarea id="previewArea" readonly></textarea>
+
+<script>
+  let ids = [];
+
+  document.getElementById('fileInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const lines = event.target.result.split(/[\n,]+/).map(l => l.trim()).filter(Boolean);
+      ids = lines;
+      renderBlocks(lines);
+    };
+    reader.readAsText(file);
+  });
+
+  function renderBlocks(urlList) {
+    const container = document.getElementById('blocksContainer');
+    container.innerHTML = '';
+
+    urlList.forEach(rawLine => {
+      let id;
+      let description = '';
+
+      const urlMatch = rawLine.match(/users\/(\d+)\/profile/);
+      if (urlMatch) {
+        id = urlMatch[1];
+      } else {
+        const idMatch = rawLine.match(/^(\d+)/);
+        if (idMatch) {
+          id = idMatch[1];
+          description = rawLine.substring(id.length).trim();
+        } else {
+          return; // skip invalid line
+        }
+      }
+
+      const div = document.createElement('div');
+      div.className = 'id-block';
+      div.innerHTML = `
+        <h3>
+          <a href="https://www.roblox.com/users/${id}/profile" target="_blank" rel="noopener noreferrer">
+            ${id}${description ? ' — ' + description : ''}
+          </a>
+        </h3>
+        <label class="reason">
+          <input type="checkbox" class="checkbox">
+          User friends with <input type="text" placeholder="Account names"> and they violate Roblox TOS.
+        </label>
+        <label class="reason">
+          <input type="checkbox" class="checkbox">
+          User is in groups like <input type="text" placeholder="Group names"> and these groups violate Roblox TOS.
+        </label>
+        <div class="custom-reasons"></div>
+        <button onclick="addCustomReason(this)">+ Add Custom Reason</button>
+      `;
+      container.appendChild(div);
+
+      if (description) {
+        const customContainer = div.querySelector('.custom-reasons');
+        const reasonDiv = document.createElement('div');
+        reasonDiv.className = 'reason';
+        reasonDiv.innerHTML = `
+          <label>
+            <input type="checkbox" class="checkbox" checked>
+            <input type="text" placeholder="Your custom reason" value="${description}">
+          </label>
+        `;
+        customContainer.appendChild(reasonDiv);
+      }
+    });
+  }
+
+  function addCustomReason(button) {
+    const container = button.previousElementSibling;
+    const div = document.createElement('div');
+    div.className = 'reason';
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" class="checkbox"> 
+        <input type="text" placeholder="Your custom reason">
+      </label>
+    `;
+    container.appendChild(div);
+  }
+
+  function updatePreview() {
+    const container = document.getElementById('blocksContainer');
+    const blocks = container.querySelectorAll('.id-block');
+    const results = [];
+
+    blocks.forEach(block => {
+      const id = block.querySelector('a').innerText.split('—')[0].trim(); // remove description from ID
+      const checks = block.querySelectorAll('.checkbox');
+      const inputs = block.querySelectorAll('input[type="text"]');
+      const reasons = [];
+
+      checks.forEach((checkbox, index) => {
+        if (checkbox.checked) {
+          const input = inputs[index]?.value?.trim() || '';
+          const label = checkbox.parentElement.textContent.split(':').pop().trim();
+          let resultText;
+
+          if (label.includes("User friends with")) {
+            resultText = `User friends with ${input} and they violate Roblox TOS.`;
+          } else if (label.includes("User is in groups")) {
+            resultText = `User is in groups like ${input} and these groups violate Roblox TOS.`;
+          } else {
+            resultText = input;
+          }
+
+          if (resultText) reasons.push(resultText);
+        }
+      });
+
+      results.push(`${id} ${reasons.join(' ')}`);
+    });
+
+    document.getElementById('previewArea').value = results.join('\n');
+  }
+
+  function downloadTXT() {
+    updatePreview();
+    const text = document.getElementById('previewArea').value;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'easi_report_output.txt';
+    link.click();
+  }
+</script>
+
+</body>
+</html>

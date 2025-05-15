@@ -1,8 +1,0 @@
-The ERP url filter allows you to remove extra information from text. 
-In the end you get a raw URL output that you can use.
-Such as here is an example:
-BEFORE
-https://roblox.com/users/1/profile User is known as Roblox.
-AFTER
-
-https://roblox.com/users/1/profile

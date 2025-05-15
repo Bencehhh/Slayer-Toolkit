@@ -1,4 +1,0 @@
-Hello!
-This is a simple Morse code translator!
-You are able to translate text into morse code and you can turn morse code back into text aswell!
-The morse code tool can identify spaces and "/"'s too, so you dont need to worry about it. 

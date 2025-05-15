@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox URL Cleaner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center align items */
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 3px solid black;
+            text-shadow: 1px 1px 2px black;
+            background: repeating-linear-gradient(
+                -45deg,
+                rgb(201, 201, 1) 0px,
+                rgb(255, 255, 0) 10px,
+                black 10px,
+                rgb(10, 10, 10) 20px
+            );
+        }
+
+        label {
+            margin: 10px 0;
+        }
+
+        textarea {
+            width: calc(100% - 20px);
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: transparent;
+            color: black;
+            border: 3px solid black;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: background-color 0.3s, color 0.3s;
+            display: block;
+            max-width: 200px;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: rgba(201, 201, 1, 0.1);
+        }
+
+        #output {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            border: 3px solid black;
+            color: black;
+            white-space: pre-wrap;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Roblox URL Cleaner</h1>
+        <input type="file" id="fileInput" accept=".txt" />
+        <button id="processButton">Process File</button>
+        <textarea id="output" rows="10" placeholder="Processed URLs will appear here..."></textarea>
+        <button id="downloadButton" style="display:none;">Download Processed File</button>
+    </div>
+
+    <script>
+        document.getElementById('processButton').addEventListener('click', function () {
+            const fileInput = document.getElementById('fileInput');
+            const outputArea = document.getElementById('output');
+            const downloadButton = document.getElementById('downloadButton');
+
+            if (fileInput.files.length === 0) {
+                alert('Please upload a file first.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const lines = e.target.result.split('\n');
+                const robloxUrlRegex = /https:\/\/www\.roblox\.com\/users\/\d+\/profile/g;
+                const processedLines = [];
+
+                lines.forEach(line => {
+                    const matches = line.match(robloxUrlRegex);
+                    if (matches) {
+                        processedLines.push(...matches); // Add all found URLs to the output
+                    }
+                });
+
+                outputArea.value = processedLines.join('\n');
+                downloadButton.style.display = 'block';
+            };
+
+            reader.readAsText(file);
+        });
+
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            const outputArea = document.getElementById('output');
+            const blob = new Blob([outputArea.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'processed_urls.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2f3136;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #36393f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 800px;
+        }
+
+        input, button {
+            width: calc(100% - 20px); 
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input {
+            background-color: #40444b;
+            color: white;
+        }
+
+        input::placeholder {
+            color: #b9bbbe; 
+        }
+
+        button {
+            background-color: #7289da;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            width: 50%; 
+            margin: 10px auto; 
+            display: block;
+        }
+
+        button:hover {
+            background-color: #5b6eae;
+        }
+
+        .file-upload {
+            background-color: #40444b;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #b9bbbe; 
+            width: calc(100% - 20px); 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Webhook Application</h1>
+        <label for="webhook">Webhook Link:</label>
+        <input type="text" id="webhook" placeholder="Enter your webhook URL here">
+
+        <label for="username">Bot Username:</label>
+        <input type="text" id="username" placeholder="Enter username">
+
+        <label for="avatar">Avatar URL:</label>
+        <input type="text" id="avatar" placeholder="Enter avatar image URL">
+
+        <label for="content">Content:</label>
+        <input type="text" id="content" placeholder="Enter message content">
+
+        <label for="fileUpload">Upload Files:</label>
+        <input class="file-upload" type="file" id="fileUpload" multiple>
+
+        <label for="credit">Created by: BenXiadous</label>
+
+        <button onclick="sendWebhook()">Send</button>
+    </div>
+
+    <script>
+        async function sendWebhook() {
+            const webhookUrl = document.getElementById('webhook').value;
+            const username = document.getElementById('username').value;
+            const avatarUrl = document.getElementById('avatar').value;
+            const content = document.getElementById('content').value;
+            const fileUpload = document.getElementById('fileUpload').files;
+
+            if (!webhookUrl) {
+                alert('Please enter a valid webhook URL.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('payload_json', JSON.stringify({
+                username: username || 'Webhook Sender',
+                avatar_url: avatarUrl || '',
+                content: content || ''
+            }));
+
+            for (let i = 0; i < fileUpload.length; i++) {
+                formData.append(`file${i}`, fileUpload[i]);
+            }
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                } else {
+                    alert('Failed to send message. Check your webhook URL.');
+                }
+            } catch (error) {
+                console.error('Error sending webhook:', error);
+                alert('An error occurred. Check the console for details.');
+            }
+        }
+    </script>
+</body>
+</html>

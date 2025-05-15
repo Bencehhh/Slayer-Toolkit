@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP LINK APPENDER</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 10px;
+            background: #f9f9f9;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Title with hazard styling */
+        h1 {
+            color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 1.5em;
+            background: repeating-linear-gradient(
+                -45deg,
+                #c9c901 0px,
+                #ffff00 10px,
+                #000 10px,
+                #0a0a0a 20px
+            );
+            text-shadow: 1px 1px 2px black;
+        }
+        /* Centered button container */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            margin-top: 15px;
+            background-color: rgba(201, 201, 1, 0.1);
+        }
+
+        /* Button styling to match the "Load Database" style */
+        .button {
+            background-color: #ffffff;
+            color: black;
+            border: 3px solid;
+            border-image: repeating-linear-gradient(
+                45deg,
+                black,
+                black 10px,
+                yellow 10px,
+                yellow 20px
+            ) 10;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 15px;
+            display: block;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        /* Hover and active button effects */
+        .button:hover {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .button:active {
+            transform: scale(0.97);
+        }
+
+        /* Link input area styling */
+        #linkContainer textarea {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        /* Output box styling */
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            border: 2px solid black;
+            white-space: pre-wrap;
+            font-weight: bold;
+            color: #333;
+        }
+        .watermark {
+            position: fixed; /* Fixed position for staying at bottom right */
+            bottom: 10px; /* Distance from bottom */
+            right: 10px; /* Distance from right */
+            color: black; /* Text color */
+            font-size: 14px; /* Adjust font size as necessary */
+            opacity: 1; /* Optional: make it semi-transparent */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ERP LINK APPENDER</h1>
+        
+        <div id="linkContainer"></div>
+        
+        <div class="buttons">
+            <button class="button" onclick="addLinkBox()">Add Link (INFINITE) </button>
+            <button class="button" onclick="updateLinks()">Update Link Database</button>
+            <button class="button" onclick="downloadLinks()">Download Database </button>
+        </div>
+        
+        <div id="output">Link outputs will appear here.</div>
+        <div class="watermark">Created by BenXiadous
+        </div>
+    </div>
+
+    <script>
+        // Function to add a new link input box
+        function addLinkBox() {
+            const linkContainer = document.getElementById('linkContainer');
+            const input = document.createElement('textarea');
+            input.placeholder = 'Paste your link here...';
+            linkContainer.appendChild(input);
+        }
+
+        // Function to update and display all entered links in output box
+        function updateLinks() {
+            const linkContainer = document.getElementById('linkContainer');
+            const textareas = linkContainer.querySelectorAll('textarea');
+            let allLinks = '';
+
+            textareas.forEach((textarea) => {
+                if (textarea.value.trim() !== '') {
+                    allLinks += textarea.value.trim() + '\n';
+                }
+            });
+
+            const outputDiv = document.getElementById('output');
+            outputDiv.textContent = allLinks;
+        }
+
+        // Function to download all links as a .txt file
+        function downloadLinks() {
+            const output = document.getElementById('output').textContent;
+            if (!output.trim()) {
+                alert("There are no links to download!");
+                return;
+            }
+            const blob = new Blob([output], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'links.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

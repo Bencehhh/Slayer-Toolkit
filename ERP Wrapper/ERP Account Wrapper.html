@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFD ERP Account Wrapper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 3px solid black;
+            position: relative;
+            text-shadow: 1px 1px 2px black;
+        }
+        h1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: -1;
+            background: repeating-linear-gradient(
+                -45deg,
+                rgb(201, 201, 1) 0px,
+                rgb(255, 255, 0) 10px,
+                black 10px,
+                rgb(10, 10, 10) 20px
+            );
+            border-radius: 5px;
+        }
+        .file-input {
+            margin: 10px;
+        }
+        .output-container, .url-container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .url-box {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .url-box a {
+            color: red;
+        }
+        .url-box.clicked a {
+            color: green;
+        }
+        .url-box p {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .criteria {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        .criteria input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .criteria input[type="text"] {
+            padding: 3px 6px;
+            width: 130px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            background-color: #f9f9f9;
+        }
+        .friends-container {
+            display: flex;
+            flex-direction: column;
+            margin-left: 5px;
+        }
+        .friends-line {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        .friends-line input {
+            font-size: 1em;
+        }
+        .friends-line span {
+            text-transform: none;
+            font-size: 1em;
+        }
+        .output-preview {
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button, #fileInput {
+            background-color: transparent;
+            color: black;
+            border: 3px solid;
+            border-image: repeating-linear-gradient(
+                45deg,
+                black,
+                black 10px,
+                yellow 10px,
+                yellow 20px
+            ) 10;
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: background-color 0.3s, color 0.3s;
+            display: block;
+            text-align: center;
+        }
+        button:hover, #fileInput:hover {
+            background-color: rgba(201, 201, 1, 0.1);
+        }
+        .url-panel {
+            background-color: transparent;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 3px solid;
+            border-image: repeating-linear-gradient(
+                45deg,
+                black,
+                black 10px,
+                yellow 10px,
+                yellow 20px
+            ) 10;
+        }
+        .panel {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        h3, h4 {
+            color: black;
+            margin: 10px 0;
+        }
+        .custom-field {
+            margin-top: 10px;
+            display: block;
+            width: calc(100% - 22px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #url-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #result {
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            border: 3px solid;
+            border-image: repeating-linear-gradient(
+                45deg,
+                black,
+                black 10px,
+                yellow 10px,
+                yellow 20px
+            ) 10;
+            color: black;
+            white-space: pre-wrap;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: black;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>MFD ERP Account Wrapper</h1>
+    
+    <input type="file" id="fileInput" class="file-input" accept=".txt">
+
+    <div id="urlContainer" class="url-container">
+        <h2>ERP ACCOUNT LIST:</h2>
+        <!-- URL boxes will be displayed here -->
+    </div>
+    
+    <div class="button-group">
+        <button id="updateBtn" class="button">Update Database</button>
+        <button id="downloadBtn" class="button">Download Database</button>
+        <button id="downloadRemainingBtn" class="button">Download Remaining Links</button>
+    </div>
+
+    <div id="outputPreview" class="output-preview">
+        <!-- Updated output preview will appear here -->
+    </div>
+
+    <div class="watermark">Created by BenXiadous</div>
+
+    <script>
+            let urls = [];
+    
+    // Read the file and extract URLs
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            urls = e.target.result.split('\n').filter(line => line.trim() !== "");
+            displayURLs();
+        };
+        reader.readAsText(file);
+    });
+
+    // Display each URL with checkboxes and input fields for each criteria
+    function displayURLs() {
+        const urlContainer = document.getElementById('urlContainer');
+        urlContainer.innerHTML = '<h2>URLs Loaded:</h2>';
+
+        urls.forEach((url, index) => {
+            const urlBox = document.createElement('div');
+            urlBox.className = 'url-box';
+
+            // Make URL clickable here only
+            urlBox.innerHTML = `
+                    <p><a href="${url}" target="_blank" onclick="markAsClicked(event)">${url}</a></p>
+                <div class="criteria">
+                    <label>
+                        <input type="checkbox" class="interestToggle"> 
+                        User interested in 
+                    </label>
+                    <input type="text" class="interestInput" placeholder="Interest">
+                    <span>activity.</span>
+                </div>
+                <div class="criteria">
+                    <label>
+                        <input type="checkbox" class="interestToggle"> 
+                        User interested in 
+                    </label>
+                    <input type="text" class="interestInput" placeholder="Interests">
+                    <span>activities.</span>
+                </div>
+                <div class="criteria">
+                    <input type="checkbox" class="friendsToggle">
+                    <div class="friends-container">
+                        <div class="friends-line">
+                            <span>User friends with a </span>
+                            <input type="text" class="friendsInput" placeholder="Interest">
+                            <span> account.</span>
+                        </div>
+                        <div class="friends-line">
+                            <span>User friends with an account named</span>
+                            <input type="text" class="usernamesInput" placeholder="Username">
+                            <span>who violates Roblox TOS.</span>
+                        </div>
+                    </div>  
+                </div>
+                 <div class="criteria">
+                    <input type="checkbox" class="friendsToggle">
+                    <div class="friends-container">
+                        <div class="friends-line">
+                            <span>User friends with</span>
+                            <input type="text" class="friendsInput" placeholder="Interests">
+                            <span>accounts.</span>
+                        </div>
+                        <div class="friends-line">
+                            <span>User friends with accounts such as</span>
+                            <input type="text" class="usernamesInput" placeholder="Usernames">
+                            <span>and they violate Roblox TOS.</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="criteria">
+                    <label>
+                        <input type="checkbox" class="groupsToggle"> 
+                        User is in groups named
+                    </label>
+                    <input type="text" class="groupsInput" placeholder="Groups">
+                    <span>which are</span>
+                    <input type="text" class="groupTypeInput" placeholder="Group Type">
+                    <span>groups.</span>
+                </div>
+                <div class="criteria">
+                    <label>
+                        <input type="checkbox" class="groupsToggle"> 
+                        User is in group named
+                    </label>
+                    <input type="text" class="groupsInput" placeholder="Group name">
+                    <span>which is a</span>
+                    
+                    <input type="text" class="groupTypeInput" placeholder="Group Type">
+                    <span>group.</span>
+                </div>
+                <div class="custom-checkbox-container">
+                    <button class="button add-checkbox" onclick="addCustomCheckbox(event)">Add Custom Checkbox</button>
+                    <div class="custom-checkboxes">
+                        <!-- Dynamic custom checkboxes will be added here -->
+                    </div>
+                </div>
+            `;
+
+
+            urlContainer.appendChild(urlBox);
+        });
+    }
+
+    // Generate the output for each URL based on the criteria selected
+    function generateOutput() {
+let outputText = '';
+
+document.querySelectorAll('.url-box').forEach(box => {
+    // Retrieve the URL text (not the anchor element)
+    let urlText = box.querySelector('p').textContent.trim();
+    let outputLine = urlText; // Start with the URL text only
+
+    // Iterate over interest checkboxes and inputs
+    box.querySelectorAll('.interestToggle').forEach((checkbox, i) => {
+        if (checkbox.checked) {
+            const interestInput = box.querySelectorAll('.interestInput')[i];
+            const interest = interestInput ? interestInput.value.trim() : '';
+            if (interest) outputLine += ` User interested in ${interest} activities.`;
+        }
+    });
+
+    // Iterate over friends checkboxes and inputs
+    box.querySelectorAll('.friendsToggle').forEach((checkbox, i) => {
+        if (checkbox.checked) {
+            const friendsInput = box.querySelectorAll('.friendsInput')[i];
+            const usernamesInput = box.querySelectorAll('.usernamesInput')[i];
+            const friends = friendsInput ? friendsInput.value.trim() : '';
+            const usernames = usernamesInput ? usernamesInput.value.trim() : '';
+            if (friends) outputLine += ` User friends with ${friends} accounts.`;
+            if (usernames) outputLine += ` User friends with accounts such as ${usernames} and they violate Roblox TOS.`;
+        }
+    });
+
+    // Iterate over groups checkboxes and inputs
+    box.querySelectorAll('.groupsToggle').forEach((checkbox, i) => {
+        if (checkbox.checked) {
+            const groupsInput = box.querySelectorAll('.groupsInput')[i];
+            const groupTypeInput = box.querySelectorAll('.groupTypeInput')[i];
+            const groups = groupsInput ? groupsInput.value.trim() : '';
+            const groupType = groupTypeInput ? groupTypeInput.value.trim() : '';
+            if (groups || groupType) {
+                outputLine += ` User is in groups named ${groups} which are ${groupType} groups.`;
+            }
+        }
+    });
+
+    // Include any custom checkboxes if they are checked
+    box.querySelectorAll('.customCheckboxToggle').forEach((customCheckbox, i) => {
+        if (customCheckbox.checked) {
+            const customInput = box.querySelectorAll('.customCheckboxInput')[i];
+            const customText = customInput ? customInput.value.trim() : '';
+            if (customText) outputLine += ` ${customText}`;
+        }
+    });
+
+    // Append the completed line to outputText if any criteria are checked
+    if (outputLine !== urlText) outputText += outputLine + '\n';
+});
+
+return outputText.trim();
+}
+    // Update the output preview
+    document.getElementById('updateBtn').addEventListener('click', function() {
+        const output = generateOutput();
+        document.getElementById('outputPreview').textContent = output;
+    });
+
+    // Download the generated output as a txt file
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        const output = generateOutput();
+        const blob = new Blob([output], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'output.txt';
+        a.click();
+
+        URL.revokeObjectURL(url);
+    });
+    // Function to add a new custom checkbox dynamically inside a URL box
+function addCustomCheckbox(event) {
+// Find the closest `.url-box` container for the button that was clicked
+const urlBox = event.target.closest('.url-box');
+
+if (urlBox) {
+    // Locate the `.custom-checkboxes` container inside this `.url-box`
+    const customCheckboxContainer = urlBox.querySelector('.custom-checkboxes');
+    
+    // Check if the container exists before trying to add elements
+    if (customCheckboxContainer) {
+        // Create a new custom checkbox and input field
+        const customCheckbox = document.createElement('div');
+        customCheckbox.classList.add('custom-checkbox');
+        
+        // Define the HTML structure for the custom checkbox and input
+        customCheckbox.innerHTML = `
+            <input type="checkbox" class="customCheckboxToggle"> 
+            <input type="text" class="customCheckboxInput" placeholder="Custom Text">
+        `;
+        
+        // Append the custom checkbox div to the container
+        customCheckboxContainer.appendChild(customCheckbox);
+    } else {
+        console.error("Custom checkbox container not found.");
+    }
+} else {
+    console.error("URL box container not found.");
+}
+}
+function markAsClicked(event) {
+// Prevent the link's default behavior to allow changing color immediately
+event.preventDefault();
+
+// Add the "clicked" class to the URL box container
+const urlBox = event.target.closest('.url-box');
+if (urlBox) {
+    urlBox.classList.add('clicked');
+}
+
+// Open the URL in a new tab
+window.open(event.target.href, '_blank');
+}
+// Extract remaining (unchecked) URLs
+function generateRemainingURLs() {
+    let remainingURLs = [];
+
+    document.querySelectorAll('.url-box').forEach(box => {
+        const urlText = box.querySelector('p').textContent.trim();
+        let isChecked = false;
+
+        // Check if any criteria are selected for the URL
+        box.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            if (checkbox.checked) isChecked = true;
+        });
+
+        // If no criteria are checked, add the URL to remainingURLs
+        if (!isChecked) remainingURLs.push(urlText);
+    });
+
+    return remainingURLs.join('\n'); // Combine the remaining URLs into a single string
+}
+
+// Download remaining URLs as remaining.txt
+document.getElementById('downloadRemainingBtn').addEventListener('click', function() {
+    const remaining = generateRemainingURLs();
+    const blob = new Blob([remaining], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'remaining.txt';
+    a.click();
+
+    URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>

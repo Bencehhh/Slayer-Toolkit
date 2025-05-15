@@ -1,0 +1,19 @@
+MFD ERP GROUP LINKER
+
+How to use:
+
+Hello!
+Thank you for downloading my ERP GROUP LINK APPENDER.
+
+This tool works with any links.
+Here is the steps how you can use it:
+
+1. Open the HTML file
+2. Click the Add Link Button
+3. Paste your link in the textbox where the text says 'Paste your link here...'
+4. If you want to add more links, just click the 'Add Link Button' as many times as you want.
+5. You can add infinite link entries. This works with all kinds of links, not just Roblox group links. This works outside Roblox too!
+6. You can add ERP accounts, ERP groups, ERP servers, ERP games and many more!
+7. Before downloading make sure to click the Update Link Database button, so you can see all your entries printed out in a big textbox.
+8. When you are done, click the Download Database button. You will get all your links in a single .txt file that you can send in the server for processing. 
+Note: If there are no links in your pastes, after you clicked the Add Link button, you won't get a txt file uppon clicking the download button! 
