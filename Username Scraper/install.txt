@@ -1,0 +1,10 @@
+Install these by pasting this command line in your console.
+"pip install aiohttp aiofiles selenium tqdm requests"
+Make sure Python 3.0+ are installed before this is ran.
+Make sure you open this whole folder in visual studio before running the Python code, otherwise it could have malfunctions.
+Output form still in work in progress.
+If you are running this code for the first time, use a Roblox alt and log into it within the selenium session. After that, you no longer need to relog because it Will create a cookie.pkl file for you.
+
+Input the search word in the pop up gui and press start. Time can change at any time, this depends on the length of the word and the variants quantity. Longer words longer scraping queues, more variants with longer time to finish.
+
+Scraper made by BenXiadous
