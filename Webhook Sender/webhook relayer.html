@@ -25,22 +25,27 @@
             width: 800px;
         }
 
-        input, button {
+        input, textarea, button {
             width: calc(100% - 20px); 
             padding: 10px;
             margin: 10px 0;
             border: none;
             border-radius: 5px;
             outline: none;
+            font-size: 14px;
         }
 
-        input {
+        input, textarea {
             background-color: #40444b;
             color: white;
         }
 
-        input::placeholder {
+        input::placeholder, textarea::placeholder {
             color: #b9bbbe; 
+        }
+
+        textarea {
+            resize: vertical;
         }
 
         button {
@@ -70,6 +75,7 @@
 <body>
     <div class="container">
         <h1>Discord Webhook Application</h1>
+
         <label for="webhook">Webhook Link:</label>
         <input type="text" id="webhook" placeholder="Enter your webhook URL here">
 
@@ -80,7 +86,7 @@
         <input type="text" id="avatar" placeholder="Enter avatar image URL">
 
         <label for="content">Content:</label>
-        <input type="text" id="content" placeholder="Enter message content">
+        <textarea id="content" placeholder="Enter message content" rows="5"></textarea>
 
         <label for="fileUpload">Upload Files:</label>
         <input class="file-upload" type="file" id="fileUpload" multiple>
